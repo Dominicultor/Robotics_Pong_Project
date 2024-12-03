@@ -1,4 +1,4 @@
-# Pong robotics project
+# Robotics Pong Project
 
 ## Introduction
 
