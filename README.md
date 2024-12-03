@@ -15,6 +15,8 @@
 
 ## Functionality
 
-## Results
+## Results and conclusions
+
+## Journal
 
 
