@@ -9,7 +9,13 @@
 - LCD
   [https://docs.arduino.cc/learn/electronics/lcd-displays/]
 - 8*8 LED Matrix with shield {https://ardushop.ro/ro/home/95-matrice-led-uri-8x8-circuit-de-control.html?gad_source=1&gbraid=0AAAAADlKU-7WjbQn1szImTGPoCJSqEoDc&gclid=CjwKCAiA9bq6BhAKEiwAH6bqoHuTmyFDjMcYbo7vP07UJx7_Xq1HnsRM9HsLeTqa0WV30v7ykXhSoxoCUNsQAvD_BwE]
-- 
+- Buzzer
+- 2 Joysticks [https://components101.com/modules/joystick-module]
+- 2 Potentiometers (for buzzer volume and LCD brightness control)
+- Arduino Uno R3 board
+- Large breadbord
+- Jumper wire
+- Resistors (330 ohms)
 
 ### Electrical schema
 ![Electrical_schema](https://github.com/user-attachments/assets/4b636e72-69dc-4217-b99d-9ff69293aaa8)
