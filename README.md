@@ -21,9 +21,8 @@ To test the functionality of the LCD, I uploaded the following code to the Ardui
 #include <LiquidCrystal.h>
 #include <Arduino.h>
 
-// initialize the library by associating any needed LCD interface pin
-// with the arduino pin number it is connected to
-const int rs = 7, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+// initializing the library by associating the lcd pins with the respective arduino pins that it s connected to
+const int rs = 7, en = 6,  d7 = 2, d6 = 3, d5 = 4, d4 = 5, 
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 
