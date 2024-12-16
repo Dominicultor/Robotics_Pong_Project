@@ -17,7 +17,7 @@
 ![WhatsApp Image 2024-12-16 at 19 10 27_d98df788](https://github.com/user-attachments/assets/e562884b-1d54-40d0-984a-96fa4da124e2)
 
 To test the functionality of the LCD, I uploaded the following code to the Arduino board:
-```
+```cpp
 #include <LiquidCrystal.h>
 #include <Arduino.h>
 
@@ -38,7 +38,8 @@ void setup() {
 
 void loop() {
   
-}```
+}
+ ```
 
 ## Software design
 
