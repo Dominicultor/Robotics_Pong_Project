@@ -6,6 +6,9 @@
 ## Hardware design
 
 ### List of components
+- LCD
+  [https://docs.arduino.cc/learn/electronics/lcd-displays/]
+- 8*8 LED Matrix with shield 
 
 ### Electrical schema
 ![Electrical_schema](https://github.com/user-attachments/assets/4b636e72-69dc-4217-b99d-9ff69293aaa8)
