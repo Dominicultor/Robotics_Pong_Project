@@ -28,15 +28,15 @@
 1. LCD:
 - pin k -> gnd
 - pin A -> paired with a 220 ohm resistor (datasheet) 
-- pin D7 -> 2
-- pin D6 -> 3
-- pin D5 -> 4
-- pin D4 -> 5
+- pin D7 -> 2 Arduino (digital)
+- pin D6 -> 3 Arduino (digital)
+- pin D5 -> 4 Arduino (digital)
+- pin D4 -> 5 Arduino (digital)
 - pin VSS -> gnd
 - pin VDD -> 5V
-- pin RS (LCD) -> 7 Arduino
+- pin RS (LCD) -> 7 Arduino (digital)
 - pin RW (LCD) -> gnd
-- pin E (LCD) -> 6 Arduino
+- pin E (LCD) -> 6 Arduino (digital)
 - pin Vo (LCD) -> middle pin potentiometer
 - left pin potentiometer -> gnd | righ pin potentiometer -> 5V
 
@@ -47,6 +47,24 @@
    - pin vrx -> A0 arduino
    - pin vry -> A1 Arduino
    - pin SW -> 8 Arduino (digital)
+
+- Joystick 2:
+   - pin vrx -> A2 Arduino
+   - pin vry -> A3 Arduino
+   - pin SW -> 9 Arduino (digital)
+  
+3. LED matrix
+- pin vcc -> 5V
+- pin gnd -> gnd
+- pin DIN -> 10 Arduino (digital)
+- pin CS -> 11 Arduino (digital)
+- pin CLK -> 12 Arduino (digital)
+
+4. Buzzer
+- Positive pin -> paired with a 220 ohm resistor
+- Negative pin -> 13 Arduino (digital)
+- middle pin potentiometer -> A4 Arduino
+- left pin potentiometer -> gnd | righ pin potentiometer -> 5V
 
 
 ### Photo of setup
