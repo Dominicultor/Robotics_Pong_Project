@@ -23,6 +23,30 @@
 ### Bloc schema
 ![Bloc_Schema](https://github.com/user-attachments/assets/37c18c2c-1ed0-43cd-8d78-f17d8894d4d6)
 
+### Pin configuration
+
+1. LCD:
+- pin k -> gnd
+- pin A -> paired with a 220 ohm resistor (datasheet) 
+- pin D7 -> 2
+- pin D6 -> 3
+- pin D5 -> 4
+- pin D4 -> 5
+- pin VSS -> gnd
+- pin VDD -> 5V
+- pin RS (LCD) -> 7 Arduino
+- pin RW (LCD) -> gnd
+- pin E (LCD) -> 6 Arduino
+- pin Vo (LCD) -> middle pin potentiometer
+- left pin potentiometer -> gnd | righ pin potentiometer -> 5V
+
+2. Joysticks:
+   - a
+   - a
+   - a
+   - a
+
+
 ### Photo of setup
 ![WhatsApp Image 2024-12-16 at 19 10 27_d98df788](https://github.com/user-attachments/assets/e562884b-1d54-40d0-984a-96fa4da124e2)
 
