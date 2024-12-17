@@ -40,11 +40,13 @@
 - pin Vo (LCD) -> middle pin potentiometer
 - left pin potentiometer -> gnd | righ pin potentiometer -> 5V
 
-2. Joysticks:
-   - a
-   - a
-   - a
-   - a
+2. Joysticks:  (Joystick 1 -> brown gnd cable | Joystick 2 -> purple gnd cable)
+- pin gnd -> gnd (for both)
+- pin 5v -> + (for both)
+- Joystick 1:
+   - pin vrx -> A0 arduino
+   - pin vry -> A1 Arduino
+   - pin SW -> 8 Arduino (digital)
 
 
 ### Photo of setup
