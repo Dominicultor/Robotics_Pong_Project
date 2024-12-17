@@ -1,7 +1,8 @@
 # Robotics Pong Project
 
 ## Introduction
-
+For my robotics project I have decided to make a personalized version of the well-known PONG game. 
+It is one of the most popular games of all time, and it offers a lot of versatility for both the hardware and the software implementation.
 
 ## Hardware design
 
@@ -9,7 +10,7 @@
 - LCD
   [https://docs.arduino.cc/learn/electronics/lcd-displays/]
 - 8*8 LED Matrix with shield {https://ardushop.ro/ro/home/95-matrice-led-uri-8x8-circuit-de-control.html?gad_source=1&gbraid=0AAAAADlKU-7WjbQn1szImTGPoCJSqEoDc&gclid=CjwKCAiA9bq6BhAKEiwAH6bqoHuTmyFDjMcYbo7vP07UJx7_Xq1HnsRM9HsLeTqa0WV30v7ykXhSoxoCUNsQAvD_BwE] <br>
-[https://www.youtube.com/watch?v=sHNohdM_HJ4&t=136s]
+Video that helped: [https://www.youtube.com/watch?v=sHNohdM_HJ4&t=136s]
 - Buzzer
 - 2 Joysticks [https://components101.com/modules/joystick-module]
 - 2 Potentiometers (for buzzer volume and LCD brightness control)
@@ -80,8 +81,8 @@ We are using pins D4-D7 for 4 bit mode. (D0-D3 are for 8 bit mode).
 - pin vcc -> 5V
 - pin gnd -> gnd
 - pin DIN -> 10 Arduino (digital) (Transfers data from Arduino to the LED matrix.)
-- pin CS -> 11 Arduino (digital)  (Chip select, )
-- pin CLK -> 12 Arduino (digital) (fordata transfer synchronisation)
+- pin CS -> 11 Arduino (digital)  (Chip select)
+- pin CLK -> 12 Arduino (digital) (for data transfer synchronisation)
 
 4. Buzzer
 - Positive pin -> paired with a 330 ohm resistor
