@@ -29,21 +29,20 @@ Video that helped: [https://www.youtube.com/watch?v=sHNohdM_HJ4&t=136s]
 The **LCD** is initially responsible with displaying the greeting message (when the board is powered up) and then with the main menu.
 The main menu has 4 sections :
 - Start game
-- Settings (LCD brightness, buzzer volume, Sound on/off, Difficulty)
+- Difficulty 
 - How to play instructions
 - About section
-Once the game begins, it is tasked with displaying a countdown, and various messages during the game (such as when scoring, hitting the ball, winning a match).
+Once the game begins, it is tasked with displaying a countdown, and various messages during the game (such as when scoring/winning a match).
 
 The **Joysticks** are tasked with moving the pong pallets during gameplay. 
 One of them will also control all options in the LCD menu.
 
 The **LED matrix** is tasked with displaying the actual game, the ball and 2 pallets. Pallets will be displayed as 3 dots at the edge of the matrix,
-the bal will be displayed as 1 dot, appearing randomly in the center at the beginning. Connected through SPI (Serial Peripheral Interface)
+the bal will be displayed as 1 dot, appearing in the center at the beginning. Connected through SPI (Serial Peripheral Interface)
 
-The 2 **potentiometers** are individually tasked with controlling the LCD brightness and the buzzer volume in the main menu.
+The 2 **potentiometers** are individually tasked with controlling the LCD brightness and the buzzer tone(frequency).
 
 The **buzzer** is responsible for all the sounds in the game. Small short sounds for scrolling in the menu, or hitting the ball during gameplay.
-Longer sounds (at least 2 notes) for each point scored, and a short song at the end of a match.
 
 
 ### Pin configuration
@@ -118,9 +117,43 @@ void loop() {
  ```
 
 ## Software design
+The software is built using distinct sections for:
 
+- **Initialization**: Configuring hardware components and displaying the welcome screen.
+- **Game Menu**: Managing menu options and user interactions.
+- **Game Logic**: Handling paddle movement, ball physics, and scoring.
 
-## Functionality
+## Functionalities
+1. Menu System
+The menu allows the user to select game options, including starting the game, setting difficulty, and viewing "About" or "How to Play" sections.
+
+Key Functions:
+
+displayMenu(): Displays the main menu.
+displayDifficultyMenu(): Handles the difficulty selection submenu.
+```cpp
+void displayMenu() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("> " + menuOptions[currentSelection]);
+  if (currentSelection + 1 < menuCount) {
+    lcd.setCursor(0, 1);
+    lcd.print(menuOptions[currentSelection + 1]);
+  }
+}
+ ```
+
+```cpp
+void displayDifficultyMenu() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("> " + difficultyOptions[currentDifficulty]);
+  if (currentDifficulty + 1 < difficultyCount) {
+    lcd.setCursor(0, 1);
+    lcd.print(difficultyOptions[currentDifficulty + 1]);
+  }
+}
+ ```
 
 ## Results and conclusions
 
