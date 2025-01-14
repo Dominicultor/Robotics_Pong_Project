@@ -124,46 +124,173 @@ The software is built using distinct sections for:
 - **Game Logic**: Handling paddle movement, ball physics, and scoring.
 
 ## Functionalities/Main functions
-1. setup()
+1. **setup()**
 Purpose: Initializes the hardware components and displays the welcome screen.
 Key Actions:
 - Sets up the LCD, LED matrix, and joystick pins.
 - Displays "P" on the LED matrix using displayP().
 - Plays the startup song using playSong().
 - Transitions to the main menu using displayMenu().
+```cpp
+void setup() {
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("Welcome to Pong");
 
+  lc.shutdown(0, false);
+  lc.setIntensity(0, 8);
+  lc.clearDisplay(0);
 
-2. loop()
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(joystickSW, INPUT_PULLUP);
+
+  displayP(); // Display "P" during the startup
+  unsigned long startMillis = millis();
+  playSong(); // Play startup song
+
+  // Wait for 2 seconds total
+  while (millis() - startMillis < 2000) {
+    // Do nothing; just wait
+  }
+
+  // Clear the LED matrix after 2 seconds
+  lc.clearDisplay(0);
+
+  // Transition directly to the menu
+  lcd.clear();
+  inMenu = true;
+  displayMenu();
+}
+ ```
+
+2. **loop()**
 Purpose: Main program loop that manages the game state and input handling.
 Key Actions:
 - Handles joystick input using handleJoystick().
 - Manages transitions between menu options, about section, how-to-play section, and game logic.
 - Tracks timing for menu interactions, about, and how-to-play displays.
+```cpp
+void loop() {
+  unsigned long currentMillis = millis();
 
-3. playSong()
+  if (inMenu && !displayingSelection && !inAboutSection && !inHowToPlaySection) {
+    handleJoystick();
+  }
+
+  if (displayingSelection && currentMillis >= displayEndMillis) {
+    displayingSelection = false;
+    if (inDifficultyMenu) {
+      displayDifficultyMenu();
+    } else {
+      displayMenu();
+    }
+  }
+
+  if (inAboutSection) {
+    if (!aboutSecondMessageDisplayed && currentMillis - aboutStartMillis >= 2000) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Mihailescu");
+      lcd.setCursor(0, 1);
+      lcd.print("Dominic");
+      aboutSecondMessageDisplayed = true;
+    } else if (aboutSecondMessageDisplayed && currentMillis - aboutStartMillis >= 4000) {
+      inAboutSection = false;
+      displayMenu();
+    }
+  }
+
+  if (inHowToPlaySection) {
+    if (!howToPlaySecondMessageDisplayed && currentMillis - howToPlayStartMillis >= 2000) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("First to 5");
+      lcd.setCursor(0, 1);
+      lcd.print("wins the game!");
+      howToPlaySecondMessageDisplayed = true;
+    } else if (howToPlaySecondMessageDisplayed && currentMillis - howToPlayStartMillis >= 4000) {
+      inHowToPlaySection = false;
+      displayMenu();
+    }
+  }
+}
+```
+
+3. **playSong()**
 Purpose: Plays a short melody during the startup sequence.
 Key Actions:
 - Plays four notes sequentially using the tone() function.
 - Prevents static noise by setting the buzzer pin to input after playing.
 
-4. displayP()
+```cpp
+void playSong() {
+  int melody[] = {262, 330, 392, 523}; // Notes for the startup song
+  int noteDuration = 500;                  // Duration of each note
+
+  for (int i = 0; i < 4; i++) {
+    tone(buzzerPin, melody[i], noteDuration);
+    delay(noteDuration);
+  }
+  noTone(buzzerPin);           // Stop the buzzer
+  pinMode(buzzerPin, INPUT);   // Prevent static noise
+}
+```
+4. **displayP()**
 Purpose: Displays the letter "P" on the LED matrix during the startup screen.
 Key Actions:
 - Defines a byte array for the letter "P" and updates the LED matrix rows.
 
-5. displayMenu()
+```cpp
+void displayP() {
+  byte letterP[8] = {
+    B11111100,
+    B10000010,
+    B11111100,
+    B10000000,
+    B10000000,
+    B10000000,
+    B10000000,
+    B00000000
+  };
+
+  for (int row = 0; row < 8; row++) {
+    lc.setRow(0, row, letterP[row]);
+  }
+}
+```
+5. **displayMenu()**
 Purpose: Displays the main menu options on the LCD.
 Key Actions:
 - Shows the currently selected menu option and the next option (if available).
 
-
-6. displayDifficultyMenu()
+```cpp
+void displayMenu() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("> " + menuOptions[currentSelection]);
+  if (currentSelection + 1 < menuCount) {
+    lcd.setCursor(0, 1);
+    lcd.print(menuOptions[currentSelection + 1]);
+  }
+}
+```
+6. **displayDifficultyMenu()**
 Purpose: Displays the difficulty menu on the LCD.
 Key Actions:
 - Shows the current difficulty level and the next option (if available).
+```cpp
+void displayDifficultyMenu() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("> " + difficultyOptions[currentDifficulty]);
+  if (currentDifficulty + 1 < difficultyCount) {
+    lcd.setCursor(0, 1);
+    lcd.print(difficultyOptions[currentDifficulty + 1]);
+  }
+}
+```
 
-
-7. handleJoystick()
+7. **handleJoystick()**
 Purpose: Manages joystick input for navigating menus and selecting options.
 Key Actions:
 - Detects joystick movement to scroll through menu options.
@@ -171,15 +298,114 @@ Key Actions:
 - Plays a short tone when scrolling through options.
 - Handles transitions to game start, difficulty menu, about section, and how-to-play section.
 
+```cpp
+void handleJoystick() {
+  int vry = analogRead(joystickVRy);
+  int buttonState = digitalRead(joystickSW);
+  unsigned long currentMillis = millis();
 
-8. startGameCountdown()
+  if (currentMillis - lastMoveTime > moveInterval) {
+    if (vry < 400) { // Joystick moved up
+      if (inDifficultyMenu && currentDifficulty > 0) {
+        currentDifficulty--;
+        displayDifficultyMenu();
+      } else if (!inDifficultyMenu && currentSelection > 0) {
+        currentSelection--;
+        displayMenu();
+      }
+      lastMoveTime = currentMillis;
+      tone(buzzerPin, 1000);               // Start scroll sound
+      lastBuzzResetTime = currentMillis + 50; // Schedule buzzer reset
+      buzzActive = true;
+    } else if (vry > 600) { // Joystick moved down
+      if (inDifficultyMenu && currentDifficulty < difficultyCount - 1) {
+        currentDifficulty++;
+        displayDifficultyMenu();
+      } else if (!inDifficultyMenu && currentSelection < menuCount - 1) {
+        currentSelection++;
+        displayMenu();
+      }
+      lastMoveTime = currentMillis;
+      tone(buzzerPin, 1000);               // Start scroll sound
+      lastBuzzResetTime = currentMillis + 50; // Schedule buzzer reset
+      buzzActive = true;
+    }
+  }
+
+  if (buzzActive && currentMillis >= lastBuzzResetTime) {
+    noTone(buzzerPin);         // Stop the tone
+    pinMode(buzzerPin, INPUT); // Set buzzer pin to INPUT to avoid static noise
+    buzzActive = false;
+  }
+
+  if (buttonState == LOW && currentMillis - lastButtonPress > debounceTime) {
+    lastButtonPress = currentMillis;
+    if (!inDifficultyMenu && menuOptions[currentSelection] == "Start Game") {
+      startGameCountdown(); // Display countdown when "Start Game" is selected
+    } else if (!inDifficultyMenu && menuOptions[currentSelection] == "Difficulty") {
+      inDifficultyMenu = true;
+      displayDifficultyMenu();
+    } else if (!inDifficultyMenu && menuOptions[currentSelection] == "About") {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("PONG");
+      lcd.setCursor(0, 1);
+      lcd.print("By Dominicultor");
+      aboutStartMillis = currentMillis;
+      inAboutSection = true;
+      aboutSecondMessageDisplayed = false;
+    } else if (!inDifficultyMenu && menuOptions[currentSelection] == "How to Play") {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Use joystick to");
+      lcd.setCursor(0, 1);
+      lcd.print("move paddles.");
+      howToPlayStartMillis = currentMillis;
+      inHowToPlaySection = true;
+      howToPlaySecondMessageDisplayed = false;
+    } else if (inDifficultyMenu) {
+      lcd.clear();
+      lcd.print("Interval: ");
+      if (difficultyOptions[currentDifficulty] == "Easy") {
+        ballMoveInterval = 2000;
+        lcd.print("2s");
+      } else if (difficultyOptions[currentDifficulty] == "Medium") {
+        ballMoveInterval = 1000;
+        lcd.print("1s");
+      } else if (difficultyOptions[currentDifficulty] == "Hard") {
+        ballMoveInterval = 500;
+        lcd.print("0.5s");
+      }
+      inDifficultyMenu = false;
+      displayEndMillis = currentMillis + 2000; // Display interval for 2 seconds
+      displayingSelection = true;
+    }
+  }
+}
+```
+8. **startGameCountdown()**
 Purpose: Displays a countdown before starting the game.
 Key Actions:
 - Displays numbers "3", "2", "1", followed by "GO!" on the LCD.
 - Calls displayPaddlesAndBall() to start the game.
 
+```cpp 
+void startGameCountdown() {
+  lcd.clear();
+  for (int i = 3; i > 0; i--) {
+    lcd.setCursor(0, 0);
+    lcd.print(i);
+    delay(1000);
+  }
+  lcd.setCursor(0, 0);
+  lcd.print("GO!");
+  delay(1000); // Display "GO!" momentarily
 
-9. displayPaddlesAndBall()
+  // Start the game logic after countdown
+  displayPaddlesAndBall();
+}
+```
+9. **displayPaddlesAndBall()**
 Purpose: Implements the main game logic for Pong.
 Key Actions:
 - Manages ball movement and collision detection with walls and paddles.
@@ -188,11 +414,142 @@ Key Actions:
 - Ends the game and declares a winner when one player reaches a score of 5.
 - Displays the paddles, ball, and scores on the LED matrix and LCD.
 
+```cpp 
+void displayPaddlesAndBall() {
+  int ballX = 3, ballY = 3;                // Ball position
+  int ballDirectionX = 1, ballDirectionY = 1; // Ball direction
+  int leftPaddleY = 3;                     // Left paddle position
+  int rightPaddleY = 3;                    // Right paddle position
+  unsigned long lastBallMoveTime = 0;      // Timing for ball movement
+  unsigned long paddleMoveTime = 0;        // Timing for paddle movement
+  int leftScore = 0, rightScore = 0;       // Player scores
 
-10. displayMenu()
-Purpose: Displays the main menu options on the LCD.
-Key Actions:
-- Shows the currently selected menu option and the next option (if available).
+  // Define the pins for the second joystick
+  const int joystick2VRx = A2; // Right joystick VRx (horizontal)
+  const int joystick2VRy = A3; // Right joystick VRy (vertical)
+  const int joystick2SW = 9;   // Right joystick button (digital)
+
+  pinMode(joystick2SW, INPUT_PULLUP); // Set the second joystick button as input
+
+  while (true) {
+    unsigned long currentMillis = millis();
+
+    // Ball movement
+    if (currentMillis - lastBallMoveTime > ballMoveInterval) {
+      // Clear previous ball position
+      lc.setLed(0, ballY, ballX, false);
+
+      // Update ball position
+      ballX += ballDirectionX;
+      ballY += ballDirectionY;
+
+      // Check for wall collisions
+      if (ballY <= 0 || ballY >= 7) {
+        ballDirectionY = -ballDirectionY;
+      }
+
+      // Check for paddle collisions
+      if (ballX == 1 && ballY >= leftPaddleY && ballY <= leftPaddleY + 2) {
+        ballDirectionX = 1;
+        tone(buzzerPin, 1000, 50); // Paddle hit sound
+        pinMode(buzzerPin, INPUT); 
+
+      } else if (ballX == 6 && ballY >= rightPaddleY && ballY <= rightPaddleY + 2) {
+        ballDirectionX = -1;
+        tone(buzzerPin, 1000, 50); // Paddle hit sound
+        pinMode(buzzerPin, INPUT); 
+      }
+
+      // Check for scoring
+      if (ballX < 0) { // Ball passed left paddle
+        rightScore++;
+        lcd.clear();
+        lcd.print("Right Scores!");
+        delay(1000);
+        if (rightScore == 5) { // Check win condition
+          lcd.clear();
+          lcd.print("Right Wins!");
+          delay(3000);
+          break; // Exit the game loop
+        }
+        ballX = 3;
+        ballY = 3;
+        ballDirectionX = 1;
+        continue;
+      } else if (ballX > 7) { // Ball passed right paddle
+        leftScore++;
+        lcd.clear();
+        lcd.print("Left Scores!");
+        delay(1000);
+        if (leftScore == 5) { // Check win condition
+          lcd.clear();
+          lcd.print("Left Wins!");
+          delay(3000);
+          break; // Exit the game loop
+        }
+        ballX = 3;
+        ballY = 3;
+        ballDirectionX = -1;
+        continue;
+      }
+
+      // Draw updated ball position
+      lc.setLed(0, ballY, ballX, true);
+      lastBallMoveTime = currentMillis;
+    }
+
+    // Paddle movement
+    if (currentMillis - paddleMoveTime > 100) {
+      // Joystick input for left paddle
+      int vry = analogRead(joystickVRy);
+      if (vry < 400 && leftPaddleY > 0) {
+        leftPaddleY--;
+      } else if (vry > 600 && leftPaddleY < 5) {
+        leftPaddleY++;
+      }
+
+      // Joystick input for right paddle
+      int vry2 = analogRead(joystick2VRy);
+      if (vry2 < 400 && rightPaddleY > 0) {
+        rightPaddleY--;
+      } else if (vry2 > 600 && rightPaddleY < 5) {
+        rightPaddleY++;
+      }
+
+      paddleMoveTime = currentMillis;
+    }
+
+    // Update paddles and ball on display
+    lc.clearDisplay(0);
+
+    // Draw left paddle
+    for (int i = 0; i < 3; i++) {
+      lc.setLed(0, leftPaddleY + i, 0, true);
+    }
+
+    // Draw right paddle
+    for (int i = 0; i < 3; i++) {
+      lc.setLed(0, rightPaddleY + i, 7, true);
+    }
+
+    // Draw ball
+    lc.setLed(0, ballY, ballX, true);
+
+    // Update scores on LCD
+    lcd.setCursor(0, 0);
+    lcd.print("L: ");
+    lcd.print(leftScore);
+    lcd.setCursor(8, 0);
+    lcd.print("R: ");
+    lcd.print(rightScore);
+  }
+
+  // Game Over: Return to menu or restart logic
+  inMenu = true; // Return to the main menu
+  displayMenu();
+}
+```
+
 ## Results and conclusions
 
 ## Journal
