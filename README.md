@@ -550,12 +550,12 @@ void displayPaddlesAndBall() {
 }
 ```
 
+## Video
 
 [Watch video here!]([https://youtu.be/372jr29r4Q4](https://youtube.com/shorts/5vbemcqpsYs)
 
 
 ## Results and conclusions
-
-## Journal
+This project was a great learning experience, it showed me the importance of working in steps, of troubleshooting, and of trying new methods of problem solving. Though I encountered multiple obstructions and difficulties, I tried to create a functional final product, maneuvering through obstacles such as the buzzer constantly playing static noise.
 
 
