@@ -123,39 +123,76 @@ The software is built using distinct sections for:
 - **Game Menu**: Managing menu options and user interactions.
 - **Game Logic**: Handling paddle movement, ball physics, and scoring.
 
-## Functionalities
-1. Menu System
-The menu allows the user to select game options, including starting the game, setting difficulty, and viewing "About" or "How to Play" sections.
+## Functionalities/Main functions
+1. setup()
+Purpose: Initializes the hardware components and displays the welcome screen.
+Key Actions:
+- Sets up the LCD, LED matrix, and joystick pins.
+- Displays "P" on the LED matrix using displayP().
+- Plays the startup song using playSong().
+- Transitions to the main menu using displayMenu().
 
-Key Functions:
 
-displayMenu(): Displays the main menu.
+2. loop()
+Purpose: Main program loop that manages the game state and input handling.
+Key Actions:
+- Handles joystick input using handleJoystick().
+- Manages transitions between menu options, about section, how-to-play section, and game logic.
+- Tracks timing for menu interactions, about, and how-to-play displays.
 
-displayDifficultyMenu(): Handles the difficulty selection submenu.
-```cpp
-void displayMenu() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("> " + menuOptions[currentSelection]);
-  if (currentSelection + 1 < menuCount) {
-    lcd.setCursor(0, 1);
-    lcd.print(menuOptions[currentSelection + 1]);
-  }
-}
- ```
+3. playSong()
+Purpose: Plays a short melody during the startup sequence.
+Key Actions:
+- Plays four notes sequentially using the tone() function.
+- Prevents static noise by setting the buzzer pin to input after playing.
 
-```cpp
-void displayDifficultyMenu() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("> " + difficultyOptions[currentDifficulty]);
-  if (currentDifficulty + 1 < difficultyCount) {
-    lcd.setCursor(0, 1);
-    lcd.print(difficultyOptions[currentDifficulty + 1]);
-  }
-}
- ```
+4. displayP()
+Purpose: Displays the letter "P" on the LED matrix during the startup screen.
+Key Actions:
+- Defines a byte array for the letter "P" and updates the LED matrix rows.
 
+5. displayMenu()
+Purpose: Displays the main menu options on the LCD.
+Key Actions:
+- Shows the currently selected menu option and the next option (if available).
+
+
+6. displayDifficultyMenu()
+Purpose: Displays the difficulty menu on the LCD.
+Key Actions:
+- Shows the current difficulty level and the next option (if available).
+
+
+7. handleJoystick()
+Purpose: Manages joystick input for navigating menus and selecting options.
+Key Actions:
+- Detects joystick movement to scroll through menu options.
+- Detects button presses to select menu options and handle submenu navigation.
+- Plays a short tone when scrolling through options.
+- Handles transitions to game start, difficulty menu, about section, and how-to-play section.
+
+
+8. startGameCountdown()
+Purpose: Displays a countdown before starting the game.
+Key Actions:
+- Displays numbers "3", "2", "1", followed by "GO!" on the LCD.
+- Calls displayPaddlesAndBall() to start the game.
+
+
+9. displayPaddlesAndBall()
+Purpose: Implements the main game logic for Pong.
+Key Actions:
+- Manages ball movement and collision detection with walls and paddles.
+- Updates paddle positions based on joystick input.
+- Tracks scores for both players.
+- Ends the game and declares a winner when one player reaches a score of 5.
+- Displays the paddles, ball, and scores on the LED matrix and LCD.
+
+
+10. displayMenu()
+Purpose: Displays the main menu options on the LCD.
+Key Actions:
+- Shows the currently selected menu option and the next option (if available).
 ## Results and conclusions
 
 ## Journal
