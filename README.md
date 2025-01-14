@@ -130,6 +130,7 @@ The menu allows the user to select game options, including starting the game, se
 Key Functions:
 
 displayMenu(): Displays the main menu.
+
 displayDifficultyMenu(): Handles the difficulty selection submenu.
 ```cpp
 void displayMenu() {
