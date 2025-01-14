@@ -551,7 +551,7 @@ void displayPaddlesAndBall() {
 ```
 
 
-[Watch video here!]([https://youtu.be/372jr29r4Q4](https://youtube.com/shorts/5vbemcqpsYs))
+[Watch video here!]([https://youtu.be/372jr29r4Q4](https://youtube.com/shorts/5vbemcqpsYs)
 
 
 ## Results and conclusions
